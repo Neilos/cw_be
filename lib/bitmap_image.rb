@@ -9,6 +9,8 @@ class BitmapImage
   end
 
   def fill(coords_x, coords_y, color)
+    return unless coords_x <= width && coords_y <= height
+
     pixels[pizel_number(coords_x, coords_y)] = color
   end
 

@@ -21,16 +21,34 @@ RSpec.describe BitmapImage do
   end
 
   describe '#fill' do
-    it 'fills the specified pixel with the given color' do
-      bitmap.fill(3, 4, 'Y')
-      expect(bitmap.to_s).to eq <<~PIXELS
-        OOOOO
-        OOOOO
-        OOOOO
-        OOYOO
-        OOOOO
-        OOOOO
-      PIXELS
+    context 'when position is within image bounds' do
+      it 'fills the specified pixel with the given color' do
+        bitmap.fill(3, 4, 'Y')
+        expect(bitmap.to_s).to eq <<~PIXELS
+          OOOOO
+          OOOOO
+          OOOOO
+          OOYOO
+          OOOOO
+          OOOOO
+        PIXELS
+      end
+    end
+
+    context 'when position is beyond image right edge' do
+      it 'does nothing' do
+        expect {
+          bitmap.fill(6, 4, 'Y')
+        }.not_to change { bitmap.to_s }
+      end
+    end
+
+    context 'when position is beyond image bottom edge' do
+      it 'does nothing' do
+        expect {
+          bitmap.fill(3, 7, 'Y')
+        }.not_to change { bitmap.to_s }
+      end
     end
   end
 end

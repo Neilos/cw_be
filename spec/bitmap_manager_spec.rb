@@ -43,6 +43,76 @@ RSpec.describe BitmapManager do
     end
   end
 
+  describe 'draw_vertical_line' do
+    before do
+      bitmap_manager.new_image(5, 6)
+    end
+
+    context 'when line is fully within image bounds' do
+      it 'sets appropriate pixels to the given color' do
+        expect {
+          bitmap_manager.draw_vertical_line(2, 3, 6, 'W')
+        }.to change {
+          bitmap_manager.show_image
+        }.from(
+          <<~PIXELS
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+          PIXELS
+        ).to(
+          <<~PIXELS
+            OOOOO
+            OOOOO
+            OWOOO
+            OWOOO
+            OWOOO
+            OWOOO
+          PIXELS
+        )
+      end
+    end
+
+    context 'when line is partially outside image bounds' do
+      it 'sets appropriate pixels to the given color' do
+        expect {
+          bitmap_manager.draw_vertical_line(2, 3, 10, 'W')
+        }.to change {
+          bitmap_manager.show_image
+        }.from(
+          <<~PIXELS
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+          PIXELS
+        ).to(
+          <<~PIXELS
+            OOOOO
+            OOOOO
+            OWOOO
+            OWOOO
+            OWOOO
+            OWOOO
+          PIXELS
+        )
+      end
+    end
+
+    context 'when line is completely outside image bounds' do
+      it 'sets appropriate pixels to the given color' do
+        expect {
+          bitmap_manager.draw_vertical_line(7, 6, 10, 'W')
+        }.not_to change { bitmap_manager.show_image }
+      end
+    end
+  end
+
   describe 'new_image' do
     it 'instantiates a new current_image of the given proportions' do
       bitmap_manager.new_image(4, 3)

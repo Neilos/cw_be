@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bitmap_editor'
 
 RSpec.describe BitmapEditor do

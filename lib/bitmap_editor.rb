@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BitmapEditor
   attr_accessor :current_image
 

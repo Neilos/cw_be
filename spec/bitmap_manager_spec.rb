@@ -111,7 +111,7 @@ RSpec.describe BitmapManager do
         subject { bitmap_manager.draw_horizontal_line(6, 9, 2, 'Z') }
 
         it 'sets appropriate pixels to the given color' do
-          expect { subject }.not_to change { bitmap_manager.show_image }
+          expect { subject }.not_to(change { bitmap_manager.show_image })
         end
 
         it { is_expected.to be_nil }
@@ -137,7 +137,7 @@ RSpec.describe BitmapManager do
         subject { bitmap_manager.draw_single_pixel(2, 5, 'B') }
 
         it 'has no effect on the current_image' do
-          expect { subject }.not_to change { bitmap_manager.show_image }
+          expect { subject }.not_to(change { bitmap_manager.show_image })
         end
 
         it { is_expected.to be_nil }
@@ -249,7 +249,7 @@ RSpec.describe BitmapManager do
         subject { bitmap_manager.draw_vertical_line(7, 6, 10, 'W') }
 
         it 'sets appropriate pixels to the given color' do
-          expect { subject }.not_to change { bitmap_manager.show_image }
+          expect { subject }.not_to(change { bitmap_manager.show_image })
         end
 
         it { is_expected.to be_nil }

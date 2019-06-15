@@ -89,7 +89,7 @@ RSpec.describe BitmapImage do
       subject { bitmap.fill(6, 4, 'Y') }
 
       it 'does nothing' do
-        expect { subject }.not_to change { bitmap.to_s }
+        expect { subject }.not_to(change { bitmap.to_s })
       end
     end
 
@@ -97,7 +97,7 @@ RSpec.describe BitmapImage do
       subject { bitmap.fill(3, 7, 'Y') }
 
       it 'does nothing' do
-        expect { subject }.not_to change { bitmap.to_s }
+        expect { subject }.not_to(change { bitmap.to_s })
       end
     end
   end

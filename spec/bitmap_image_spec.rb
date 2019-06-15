@@ -19,4 +19,18 @@ RSpec.describe BitmapImage do
       PIXELS
     end
   end
+
+  describe '#fill' do
+    it 'fills the specified pixel with the given color' do
+      bitmap.fill(3, 4, 'Y')
+      expect(bitmap.to_s).to eq <<~PIXELS
+        OOOOO
+        OOOOO
+        OOOOO
+        OOYOO
+        OOOOO
+        OOOOO
+      PIXELS
+    end
+  end
 end

@@ -8,6 +8,10 @@ class BitmapImage
     @pixels = Array.new(width * height, 'O')
   end
 
+  def fill(coords_x, coords_y, color)
+    pixels[pizel_number(coords_x, coords_y)] = color
+  end
+
   def to_s
     rows.map { |row_pixels| row_pixels.join('') }.join(LINE_END) + LINE_END
   end
@@ -15,6 +19,12 @@ class BitmapImage
   private
 
   LINE_END = "\n"
+
+  def pizel_number(coords_x, coords_y)
+    zero_indexed_x = coords_x - 1
+    zero_indexed_y = coords_y - 1
+    (width * zero_indexed_y) + zero_indexed_x
+  end
 
   def rows
     pixels.each_slice(width)

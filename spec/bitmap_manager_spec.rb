@@ -25,12 +25,8 @@ RSpec.describe BitmapManager do
     end
 
     context 'when current_image is set' do
-      let(:bitmap_image) { BitmapImage.new(3, 4) }
-
       before do
-        # Stub private current_image value
-        allow(bitmap_manager).to receive(:current_image)
-          .and_return(bitmap_image)
+        bitmap_manager.new_image(3, 4)
       end
 
       it 'returns the to_s representation of the current_image' do

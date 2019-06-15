@@ -4,6 +4,12 @@
 require './lib/bitmap_editor'
 
 file = ARGV.first
-puts 'please provide correct file' unless file && !File.exist?(file)
 
-BitmapEditor.new.run(file)
+if file && File.exist?(file)
+  BitmapEditor.new.run(file) do |output|
+    puts output || ''
+  end
+else
+  puts 'please provide correct file'
+end
+

@@ -5,6 +5,20 @@ require 'bitmap_manager'
 RSpec.describe BitmapManager do
   let(:bitmap_manager) { described_class.new }
 
+  describe 'clear_image' do
+    let(:bitmap_image) { BitmapImage.new(2, 2) }
+
+    before do
+      allow(bitmap_manager).to receive(:current_image)
+        .and_return(bitmap_image)
+    end
+
+    it 'delegates "clear" instruction to the current_image' do
+      expect(bitmap_image).to receive(:clear)
+      bitmap_manager.clear_image
+    end
+  end
+
   describe 'draw_horizontal_line' do
     before do
       bitmap_manager.new_image(5, 6)

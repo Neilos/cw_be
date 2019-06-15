@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# Parses commands converting them to recognisable method names and arguments
+# Parses commands converting them to recognisable BitmapManager
+# methods and arguments
 class CommandParser
   class UnrecognizedError < RuntimeError; end
 

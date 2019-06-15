@@ -2,7 +2,7 @@
 
 require_relative 'bitmap_image'
 
-# Translates commands into transformations understood by the BitmapImage
+# Translates complex commands into simple ones understood by the BitmapImage
 class BitmapManager
   def clear_image
     current_image&.clear

@@ -4,6 +4,10 @@ require_relative 'bitmap_image'
 
 # Translates commands into transformations understood by the BitmapImage
 class BitmapManager
+  def draw_single_pixel(coords_x, coords_y, color)
+    current_image.fill(coords_x, coords_y, color)
+  end
+
   def new_image(width, height)
     self.current_image = BitmapImage.new(width, height)
   end

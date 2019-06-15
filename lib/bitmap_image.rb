@@ -5,6 +5,11 @@ class BitmapImage
   def initialize(width, height)
     @height = height
     @width = width
+
+    initialize_pixels
+  end
+
+  def clear
     @pixels = Array.new(width * height, 'O')
   end
 
@@ -20,6 +25,8 @@ class BitmapImage
 
   private
 
+  alias initialize_pixels clear
+
   LINE_END = "\n"
 
   def pizel_number(coords_x, coords_y)
@@ -32,5 +39,6 @@ class BitmapImage
     pixels.each_slice(width)
   end
 
-  attr_reader :width, :height, :pixels
+  attr_reader :width, :height
+  attr_accessor :pixels
 end

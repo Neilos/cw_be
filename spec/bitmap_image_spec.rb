@@ -20,6 +20,42 @@ RSpec.describe BitmapImage do
     end
   end
 
+  describe '#clear' do
+    before do
+      # Fill some pixels with color
+      bitmap.fill(2, 2, 'F')
+      bitmap.fill(3, 3, 'A')
+      bitmap.fill(4, 4, 'C')
+      bitmap.fill(5, 5, 'E')
+    end
+
+    it 'resets all the pixels to their original "O" color' do
+      expect {
+        bitmap.clear
+      }.to change {
+        bitmap.to_s
+      }.from(
+        <<~PIXELS
+          OOOOO
+          OFOOO
+          OOAOO
+          OOOCO
+          OOOOE
+          OOOOO
+        PIXELS
+      ).to(
+        <<~PIXELS
+          OOOOO
+          OOOOO
+          OOOOO
+          OOOOO
+          OOOOO
+          OOOOO
+        PIXELS
+      )
+    end
+  end
+
   describe '#fill' do
     context 'when position is within image bounds' do
       it 'fills the specified pixel with the given color' do

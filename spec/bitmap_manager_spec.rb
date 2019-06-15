@@ -5,6 +5,18 @@ require 'bitmap_manager'
 RSpec.describe BitmapManager do
   let(:bitmap_manager) { described_class.new }
 
+  describe 'new_image' do
+    it 'instantiates a new current_image of the given proportions' do
+      bitmap_manager.new_image(4, 3)
+      expect(bitmap_manager.show_image).to eq(<<~PIXELS
+          OOOO
+          OOOO
+          OOOO
+        PIXELS
+      )
+    end
+  end
+
   describe 'show_image' do
     subject { bitmap_manager.show_image }
 
@@ -32,4 +44,5 @@ RSpec.describe BitmapManager do
       end
     end
   end
+
 end

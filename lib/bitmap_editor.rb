@@ -1,28 +1,31 @@
 # frozen_string_literal: true
 
+require_relative 'bitmap_manager'
+require_relative 'command_parser'
+
+# When `run`, it opens a given file,
+# parsing commands line by line,
+# delegating recognised commands to the BitmapManager
 class BitmapEditor
-  attr_accessor :current_image
+  def initialize(bitmap_manager = BitmapManager.new)
+    @bitmap_manager = bitmap_manager
+  end
 
-  def run(file)
-    return puts "please provide correct file" if file.nil? || !File.exists?(file)
-
+  def run(file, &block)
     File.open(file).each do |line|
-      line = line.chomp
-      case line
-      when 'I'
-        puts "new image"
-      when 'C'
-        puts "clearing image"
-      when 'L'
-        puts "drawing single pixel"
-      when 'V'
-        puts "drawing vertical line"
-      when 'H'
-        puts "drawing horizontal line"
-      when 'S'
-        puts "There is no image"
-      else
-      end
+      execute_command(line, &block)
     end
+  end
+
+  private
+
+  attr_reader :bitmap_manager
+
+  def execute_command(line)
+    yield bitmap_manager.send(*CommandParser.new.parse(line)) if block_given?
+  rescue BitmapManager::NoImageError
+    yield 'There is no image'
+  rescue CommandParser::UnrecognizedError
+    yield 'unrecognised command :('
   end
 end

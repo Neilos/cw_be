@@ -5,6 +5,76 @@ require 'bitmap_manager'
 RSpec.describe BitmapManager do
   let(:bitmap_manager) { described_class.new }
 
+  describe 'draw_horizontal_line' do
+    before do
+      bitmap_manager.new_image(5, 6)
+    end
+
+    context 'when line is fully within image bounds' do
+      it 'sets appropriate pixels to the given color' do
+        expect {
+          bitmap_manager.draw_horizontal_line(3, 5, 2, 'Z')
+        }.to change {
+          bitmap_manager.show_image
+        }.from(
+          <<~PIXELS
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+          PIXELS
+        ).to(
+          <<~PIXELS
+            OOOOO
+            OOZZZ
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+          PIXELS
+        )
+      end
+    end
+
+    context 'when line is partially outside image bounds' do
+      it 'sets appropriate pixels to the given color' do
+        expect {
+          bitmap_manager.draw_horizontal_line(3, 7, 2, 'Z')
+        }.to change {
+          bitmap_manager.show_image
+        }.from(
+          <<~PIXELS
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+          PIXELS
+        ).to(
+          <<~PIXELS
+            OOOOO
+            OOZZZ
+            OOOOO
+            OOOOO
+            OOOOO
+            OOOOO
+          PIXELS
+        )
+      end
+    end
+
+    context 'when line is completely outside image bounds' do
+      it 'sets appropriate pixels to the given color' do
+        expect {
+          bitmap_manager.draw_horizontal_line(6, 9, 2, 'Z')
+        }.not_to change { bitmap_manager.show_image }
+      end
+    end
+  end
+
   describe 'draw_single_pixel' do
     before do
       bitmap_manager.new_image(4, 4)

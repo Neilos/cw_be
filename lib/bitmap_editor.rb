@@ -1,4 +1,5 @@
 class BitmapEditor
+  attr_accessor :current_image
 
   def run(file)
     return puts "please provide correct file" if file.nil? || !File.exists?(file)

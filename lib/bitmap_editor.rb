@@ -12,7 +12,7 @@ class BitmapEditor
   end
 
   def run(file, &block)
-    File.open(file).each do |line|
+    File.foreach(file).each do |line|
       execute_command(line, &block)
     end
   end

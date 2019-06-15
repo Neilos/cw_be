@@ -22,7 +22,6 @@ class BitmapEditor
       when 'S'
         puts "There is no image"
       else
-        puts 'unrecognised command :('
       end
     end
   end

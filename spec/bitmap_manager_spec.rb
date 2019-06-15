@@ -28,6 +28,8 @@ RSpec.describe BitmapManager do
         expect(bitmap_image).to receive(:clear)
         subject
       end
+
+      it { is_expected.to be_nil }
     end
   end
 
@@ -71,6 +73,8 @@ RSpec.describe BitmapManager do
             PIXELS
           )
         end
+
+        it { is_expected.to be_nil }
       end
 
       context 'when line is partially outside image bounds' do
@@ -99,6 +103,8 @@ RSpec.describe BitmapManager do
             PIXELS
           )
         end
+
+        it { is_expected.to be_nil }
       end
 
       context 'when line is completely outside image bounds' do
@@ -107,6 +113,8 @@ RSpec.describe BitmapManager do
         it 'sets appropriate pixels to the given color' do
           expect { subject }.not_to change { bitmap_manager.show_image }
         end
+
+        it { is_expected.to be_nil }
       end
     end
   end
@@ -131,6 +139,8 @@ RSpec.describe BitmapManager do
         it 'has no effect on the current_image' do
           expect { subject }.not_to change { bitmap_manager.show_image }
         end
+
+        it { is_expected.to be_nil }
       end
 
       context 'when position is within image bounds' do
@@ -155,6 +165,8 @@ RSpec.describe BitmapManager do
             PIXELS
           )
         end
+
+        it { is_expected.to be_nil }
       end
     end
   end
@@ -199,6 +211,8 @@ RSpec.describe BitmapManager do
             PIXELS
           )
         end
+
+        it { is_expected.to be_nil }
       end
 
       context 'when line is partially outside image bounds' do
@@ -227,6 +241,8 @@ RSpec.describe BitmapManager do
             PIXELS
           )
         end
+
+        it { is_expected.to be_nil }
       end
 
       context 'when line is completely outside image bounds' do
@@ -235,6 +251,8 @@ RSpec.describe BitmapManager do
         it 'sets appropriate pixels to the given color' do
           expect { subject }.not_to change { bitmap_manager.show_image }
         end
+
+        it { is_expected.to be_nil }
       end
     end
   end
@@ -252,6 +270,8 @@ RSpec.describe BitmapManager do
         PIXELS
       )
     end
+
+    it { is_expected.to be_nil }
   end
 
   describe 'show_image' do

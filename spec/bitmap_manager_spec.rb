@@ -7,12 +7,16 @@ RSpec.describe BitmapManager do
 
   describe 'clear_image' do
     context 'when current_image is NOT present' do
-      it 'does nothing (without complaining)' do
-        expect { bitmap_manager.clear_image }.not_to raise_error
+      subject { bitmap_manager.clear_image }
+
+      it 'raises a BitmapManager::NoImageError' do
+        expect { subject }.to raise_error(BitmapManager::NoImageError)
       end
     end
 
     context 'when current_image is present' do
+      subject { bitmap_manager.clear_image }
+
       let(:bitmap_image) { BitmapImage.new(2, 2) }
 
       before do
@@ -22,17 +26,17 @@ RSpec.describe BitmapManager do
 
       it 'delegates "clear" instruction to the current_image' do
         expect(bitmap_image).to receive(:clear)
-        bitmap_manager.clear_image
+        subject
       end
     end
   end
 
   describe 'draw_horizontal_line' do
     context 'when current_image is NOT present' do
-      it 'does nothing (without complaining)' do
-        expect {
-          bitmap_manager.draw_horizontal_line(3, 5, 2, 'Z')
-        }.not_to raise_error
+      subject { bitmap_manager.draw_horizontal_line(3, 5, 2, 'Z') }
+
+      it 'raises a BitmapManager::NoImageError' do
+        expect { subject }.to raise_error(BitmapManager::NoImageError)
       end
     end
 
@@ -42,10 +46,10 @@ RSpec.describe BitmapManager do
       end
 
       context 'when line is fully within image bounds' do
+        subject { bitmap_manager.draw_horizontal_line(3, 5, 2, 'Z') }
+
         it 'sets appropriate pixels to the given color' do
-          expect {
-            bitmap_manager.draw_horizontal_line(3, 5, 2, 'Z')
-          }.to change {
+          expect { subject }.to change {
             bitmap_manager.show_image
           }.from(
             <<~PIXELS
@@ -70,10 +74,10 @@ RSpec.describe BitmapManager do
       end
 
       context 'when line is partially outside image bounds' do
+        subject { bitmap_manager.draw_horizontal_line(3, 7, 2, 'Z') }
+
         it 'sets appropriate pixels to the given color' do
-          expect {
-            bitmap_manager.draw_horizontal_line(3, 7, 2, 'Z')
-          }.to change {
+          expect { subject }.to change {
             bitmap_manager.show_image
           }.from(
             <<~PIXELS
@@ -98,10 +102,10 @@ RSpec.describe BitmapManager do
       end
 
       context 'when line is completely outside image bounds' do
+        subject { bitmap_manager.draw_horizontal_line(6, 9, 2, 'Z') }
+
         it 'sets appropriate pixels to the given color' do
-          expect {
-            bitmap_manager.draw_horizontal_line(6, 9, 2, 'Z')
-          }.not_to change { bitmap_manager.show_image }
+          expect { subject }.not_to change { bitmap_manager.show_image }
         end
       end
     end
@@ -109,10 +113,10 @@ RSpec.describe BitmapManager do
 
   describe 'draw_single_pixel' do
     context 'when current_image is NOT present' do
-      it 'does nothing (without complaining)' do
-        expect {
-          bitmap_manager.draw_single_pixel(2, 5, 'B')
-        }.not_to raise_error
+      subject { bitmap_manager.draw_single_pixel(2, 5, 'B') }
+
+      it 'raises a BitmapManager::NoImageError' do
+        expect { subject }.to raise_error(BitmapManager::NoImageError)
       end
     end
 
@@ -122,18 +126,18 @@ RSpec.describe BitmapManager do
       end
 
       context 'when position is outside of image bounds' do
+        subject { bitmap_manager.draw_single_pixel(2, 5, 'B') }
+
         it 'has no effect on the current_image' do
-          expect {
-            bitmap_manager.draw_single_pixel(2, 5, 'B')
-          }.not_to change { bitmap_manager.show_image }
+          expect { subject }.not_to change { bitmap_manager.show_image }
         end
       end
 
       context 'when position is within image bounds' do
+        subject { bitmap_manager.draw_single_pixel(2, 3, 'B') }
+
         it 'sets a specified pixel of the current_image to the given color' do
-          expect {
-            bitmap_manager.draw_single_pixel(2, 3, 'B')
-          }.to change {
+          expect { subject }.to change {
             bitmap_manager.show_image
           }.from(
             <<~PIXELS
@@ -157,10 +161,10 @@ RSpec.describe BitmapManager do
 
   describe 'draw_vertical_line' do
     context 'when current_image is NOT present' do
-      it 'does nothing (without complaining)' do
-        expect {
-          bitmap_manager.draw_vertical_line(2, 3, 6, 'W')
-        }.not_to raise_error
+      subject { bitmap_manager.draw_vertical_line(2, 3, 6, 'W') }
+
+      it 'raises a BitmapManager::NoImageError' do
+        expect { subject }.to raise_error(BitmapManager::NoImageError)
       end
     end
 
@@ -170,10 +174,10 @@ RSpec.describe BitmapManager do
       end
 
       context 'when line is fully within image bounds' do
+        subject { bitmap_manager.draw_vertical_line(2, 3, 6, 'W') }
+
         it 'sets appropriate pixels to the given color' do
-          expect {
-            bitmap_manager.draw_vertical_line(2, 3, 6, 'W')
-          }.to change {
+          expect { subject }.to change {
             bitmap_manager.show_image
           }.from(
             <<~PIXELS
@@ -198,10 +202,10 @@ RSpec.describe BitmapManager do
       end
 
       context 'when line is partially outside image bounds' do
+        subject { bitmap_manager.draw_vertical_line(2, 3, 10, 'W') }
+
         it 'sets appropriate pixels to the given color' do
-          expect {
-            bitmap_manager.draw_vertical_line(2, 3, 10, 'W')
-          }.to change {
+          expect { subject }.to change {
             bitmap_manager.show_image
           }.from(
             <<~PIXELS
@@ -226,18 +230,20 @@ RSpec.describe BitmapManager do
       end
 
       context 'when line is completely outside image bounds' do
+        subject { bitmap_manager.draw_vertical_line(7, 6, 10, 'W') }
+
         it 'sets appropriate pixels to the given color' do
-          expect {
-            bitmap_manager.draw_vertical_line(7, 6, 10, 'W')
-          }.not_to change { bitmap_manager.show_image }
+          expect { subject }.not_to change { bitmap_manager.show_image }
         end
       end
     end
   end
 
   describe 'new_image' do
+    subject { bitmap_manager.new_image(4, 3) }
+
     it 'instantiates a new current_image of the given proportions' do
-      bitmap_manager.new_image(4, 3)
+      subject
       expect(bitmap_manager.show_image).to eq(
         <<~PIXELS
           OOOO
@@ -251,8 +257,8 @@ RSpec.describe BitmapManager do
   describe 'show_image' do
     subject { bitmap_manager.show_image }
 
-    context 'when no current_image (by default)' do
-      it { is_expected.to eq '' }
+    it 'raises a BitmapManager::NoImageError' do
+      expect { subject }.to raise_error(BitmapManager::NoImageError)
     end
 
     context 'when current_image is set' do
@@ -272,5 +278,4 @@ RSpec.describe BitmapManager do
       end
     end
   end
-
 end

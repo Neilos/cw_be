@@ -8,7 +8,8 @@ RSpec.describe BitmapManager do
   describe 'new_image' do
     it 'instantiates a new current_image of the given proportions' do
       bitmap_manager.new_image(4, 3)
-      expect(bitmap_manager.show_image).to eq(<<~PIXELS
+      expect(bitmap_manager.show_image).to eq(
+        <<~PIXELS
           OOOO
           OOOO
           OOOO
@@ -30,7 +31,8 @@ RSpec.describe BitmapManager do
       end
 
       it 'returns the to_s representation of the current_image' do
-        expect(subject).to eq(<<~PIXELS
+        expect(subject).to eq(
+          <<~PIXELS
             OOO
             OOO
             OOO

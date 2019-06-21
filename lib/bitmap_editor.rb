@@ -25,6 +25,8 @@ class BitmapEditor
     yield bitmap_manager.send(*CommandParser.new.parse(line)) if block_given?
   rescue BitmapManager::NoImageError
     yield 'There is no image'
+  rescue BitmapImage::InvalidColor
+    yield 'invalid color :('
   rescue CommandParser::UnrecognizedError
     yield 'unrecognised command :('
   end

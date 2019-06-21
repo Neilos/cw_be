@@ -6,6 +6,21 @@ RSpec.describe BitmapEditor do
   let(:bitmap_editor) { described_class.new }
 
   describe 'run' do
+    context 'when color is invalid' do
+      context 'when multiple characters' do
+        let(:file_path) { 'spec/fixtures/lowercase_color.txt' }
+
+        it 'yields a warning to the given block' do
+          expect { |blk|
+            bitmap_editor.run(file_path, &blk)
+          }.to yield_successive_args(
+            nil,
+            'invalid color :('
+          )
+        end
+      end
+    end
+
     context 'when a command is unrecognised' do
       let(:file_path) { 'spec/fixtures/invalid_command.txt' }
 

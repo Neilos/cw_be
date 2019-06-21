@@ -4,8 +4,6 @@
 class BitmapImage
   class InvalidColor < StandardError; end
 
-  Pixel = Struct.new(:coords_x, :coords_y, :color)
-
   def initialize(width, height)
     @height = height
     @width = width
@@ -60,10 +58,6 @@ class BitmapImage
   def ensure_valid_color!(color)
     raise InvalidColor, 'invalid color :(' if
       color != color.upcase || color.length > 1
-  end
-
-  def get_pixel(coords_x, coords_y)
-    Pixel.new(coords_x, coords_y, color_at(coords_x, coords_y))
   end
 
   def pizel_number(coords_x, coords_y)

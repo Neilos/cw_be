@@ -17,6 +17,12 @@ class BitmapImage
     @pixels = Array.new(width * height, 'O')
   end
 
+  def color_at(coords_x, coords_y)
+    return if out_of_bounds?(coords_x, coords_y)
+
+    pixels[pizel_number(coords_x, coords_y)]
+  end
+
   def color_pixel(coords_x, coords_y, color)
     ensure_valid_color!(color)
 
@@ -25,23 +31,20 @@ class BitmapImage
     pixels[pizel_number(coords_x, coords_y)] = color
   end
 
-  def fill(coords_x, coords_y, fill_color, target_color = nil)
-    return if out_of_bounds?(coords_x, coords_y)
+  def out_of_bounds?(coords_x, coords_y)
+    coords_x <= 0 ||
+      coords_y <= 0 ||
+      coords_x > width ||
+      coords_y > height
+  end
 
-    pixel = get_pixel(coords_x, coords_y)
+  def positions_adjacent_to(coords_x, coords_y)
+    return unless block_given?
 
-    if pixel.color == target_color || target_color.nil?
-      color_pixel(coords_x, coords_y, fill_color)
-
-      adjacent_pixels(coords_x, coords_y).each do |adjacent_pixel|
-        fill(
-          adjacent_pixel.coords_x,
-          adjacent_pixel.coords_y,
-          fill_color,
-          pixel.color,
-        )
-      end
-    end
+    yield coords_x, coords_y - 1
+    yield coords_x + 1, coords_y
+    yield coords_x, coords_y + 1
+    yield coords_x - 1, coords_y
   end
 
   def to_s
@@ -54,32 +57,13 @@ class BitmapImage
 
   LINE_END = "\n"
 
-  def adjacent_pixels(coords_x, coords_y)
-    [
-      get_pixel(coords_x, coords_y - 1),
-      get_pixel(coords_x + 1, coords_y),
-      get_pixel(coords_x, coords_y + 1),
-      get_pixel(coords_x - 1, coords_y),
-    ]
-  end
-
   def ensure_valid_color!(color)
-    raise InvalidColor.new('invalid color :(') if color != color.upcase || color.length > 1
+    raise InvalidColor, 'invalid color :(' if
+      color != color.upcase || color.length > 1
   end
 
   def get_pixel(coords_x, coords_y)
     Pixel.new(coords_x, coords_y, color_at(coords_x, coords_y))
-  end
-
-  def out_of_bounds?(coords_x, coords_y)
-    coords_x <= 0 ||
-    coords_y <= 0 ||
-    coords_x > width ||
-    coords_y > height
-  end
-
-  def color_at(coords_x, coords_y)
-    pixels[pizel_number(coords_x, coords_y)]
   end
 
   def pizel_number(coords_x, coords_y)

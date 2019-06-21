@@ -56,6 +56,26 @@ RSpec.describe BitmapImage do
     end
   end
 
+  describe 'color_at' do
+    context 'when within bounds' do
+      subject { bitmap.color_at(0, 4) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'when out of bounds' do
+      subject { bitmap.color_at(3, 4) }
+
+      before do
+        bitmap.color_pixel(3, 4, 'Y')
+      end
+
+      it 'is the right color' do
+        expect(subject).to eq('Y')
+      end
+    end
+  end
+
   describe '#color_pixel' do
     context 'when valid color' do
       context 'when position is within image bounds' do
@@ -136,34 +156,50 @@ RSpec.describe BitmapImage do
     end
   end
 
-  describe 'fill' do
-    subject { bitmap.fill(2, 2, 'G') }
+  describe 'out_of_bounds?' do
+    context 'when position is within bounds' do
+      subject { bitmap.out_of_bounds?(5, 6) }
 
-    let(:width) { 3 }
-    let(:height) { 3 }
-
-    before do
-      bitmap.color_pixel(1, 1, 'B')
-      bitmap.color_pixel(1, 2, 'B')
-      bitmap.color_pixel(2, 2, 'B')
-      bitmap.color_pixel(3, 1, 'B')
+      it { is_expected.to eq(false) }
     end
 
-    it 'fills pixels of the same color as the initially specified one' do
-      expect { subject }.to change {
-        bitmap.to_s
-      }.from(
-        <<~PIXELS
-          BOB
-          BBO
-          OOO
-        PIXELS
-      ).to(
-        <<~PIXELS
-          GOB
-          GGO
-          OOO
-        PIXELS
+    context 'when position is beyond image right edge' do
+      subject { bitmap.out_of_bounds?(6, 4) }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when position is beyond image bottom edge' do
+      subject { bitmap.out_of_bounds?(3, 7) }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when position is beyond image left edge' do
+      subject { bitmap.out_of_bounds?(-1, 4) }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when position is beyond image top edge' do
+      subject { bitmap.out_of_bounds?(3, -1) }
+
+      it { is_expected.to eq(true) }
+    end
+  end
+
+  describe 'positions_adjacent_to' do
+    let(:coords_x) { 3 }
+    let(:coords_y) { 2 }
+
+    it 'the four adjacent positions in turn' do
+      expect { |blk|
+        bitmap.positions_adjacent_to(coords_x, coords_y, &blk)
+      }.to yield_successive_args(
+        [3, 1],
+        [4, 2],
+        [3, 3],
+        [2, 2],
       )
     end
   end

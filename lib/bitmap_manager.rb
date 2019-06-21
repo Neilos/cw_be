@@ -38,6 +38,20 @@ class BitmapManager
     nil
   end
 
+  def fill(coords_x, coords_y, fill_color, target_color = nil)
+    return if current_image.out_of_bounds?(coords_x, coords_y)
+
+    initial_color = current_image.color_at(coords_x, coords_y)
+
+    return unless initial_color == target_color || target_color.nil?
+
+    draw_single_pixel(coords_x, coords_y, fill_color)
+
+    current_image.positions_adjacent_to(coords_x, coords_y) do |x, y|
+      fill(x, y, fill_color, initial_color)
+    end
+  end
+
   def new_image(width, height)
     self.current_image = BitmapImage.new(width, height)
     nil

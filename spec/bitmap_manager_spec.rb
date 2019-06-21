@@ -257,6 +257,37 @@ RSpec.describe BitmapManager do
     end
   end
 
+  describe 'fill' do
+    subject { bitmap_manager.fill(2, 2, 'G') }
+
+    before do
+      bitmap_manager.new_image(3, 3)
+
+      bitmap_manager.draw_single_pixel(1, 1, 'B')
+      bitmap_manager.draw_single_pixel(1, 2, 'B')
+      bitmap_manager.draw_single_pixel(2, 2, 'B')
+      bitmap_manager.draw_single_pixel(3, 1, 'B')
+    end
+
+    it 'fills pixels of the same color as the initially specified one' do
+      expect { subject }.to change {
+        bitmap_manager.show_image
+      }.from(
+        <<~PIXELS
+          BOB
+          BBO
+          OOO
+        PIXELS
+      ).to(
+        <<~PIXELS
+          GOB
+          GGO
+          OOO
+        PIXELS
+      )
+    end
+  end
+
   describe 'new_image' do
     subject { bitmap_manager.new_image(4, 3) }
 

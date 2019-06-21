@@ -110,6 +110,22 @@ RSpec.describe BitmapImage do
         expect { subject }.not_to(change { bitmap.to_s })
       end
     end
+
+    context 'when position is beyond image left edge' do
+      subject { bitmap.fill(-1, 4, 'Y') }
+
+      it 'does nothing' do
+        expect { subject }.not_to(change { bitmap.to_s })
+      end
+    end
+
+    context 'when position is beyond image top edge' do
+      subject { bitmap.fill(3, -1, 'Y') }
+
+      it 'does nothing' do
+        expect { subject }.not_to(change { bitmap.to_s })
+      end
+    end
   end
 
   describe 'flood_fill' do

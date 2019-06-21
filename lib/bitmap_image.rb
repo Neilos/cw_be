@@ -4,28 +4,7 @@
 class BitmapImage
   class InvalidColor < StandardError; end
 
-  class Pixel
-    attr_reader :coords_x, :coords_y
-    attr_accessor :color
-
-    def initialize(coords_x, coords_y, color)
-      @coords_x = coords_x
-      @coords_y = coords_y
-      @color = color
-    end
-
-    def coords_x=(x)
-      [x, 0].min
-    end
-
-    def coords_y=(y)
-      [y, 0].min
-    end
-
-    def out_of_bounds?
-      coords_x <= 0 || coords_y <= 0
-    end
-  end
+  Pixel = Struct.new(:coords_x, :coords_y, :color)
 
   def initialize(width, height)
     @height = height
@@ -41,26 +20,25 @@ class BitmapImage
   def fill(coords_x, coords_y, color)
     ensure_valid_color!(color)
 
-    return unless coords_x <= width && coords_y <= height
+    return if out_of_bounds?(coords_x, coords_y)
 
     pixels[pizel_number(coords_x, coords_y)] = color
   end
 
-  def flood_fill(coords_x, coords_y, color, target_color = nil)
+  def flood_fill(coords_x, coords_y, fill_color, target_color = nil)
+    return if out_of_bounds?(coords_x, coords_y)
+
     pixel = get_pixel(coords_x, coords_y)
-    initial_color = pixel.color
 
-    return if pixel.out_of_bounds?
-
-    if initial_color == target_color || target_color.nil?
-      fill(coords_x, coords_y, color)
+    if pixel.color == target_color || target_color.nil?
+      fill(coords_x, coords_y, fill_color)
 
       adjacent_pixels(coords_x, coords_y).each do |adjacent_pixel|
         flood_fill(
           adjacent_pixel.coords_x,
           adjacent_pixel.coords_y,
-          color,
-          initial_color,
+          fill_color,
+          pixel.color,
         )
       end
     end
@@ -78,10 +56,10 @@ class BitmapImage
 
   def adjacent_pixels(coords_x, coords_y)
     [
-      Pixel.new(coords_x, coords_y - 1, pixel_color(coords_x, coords_y)),
-      Pixel.new(coords_x + 1, coords_y, pixel_color(coords_x, coords_y)),
-      Pixel.new(coords_x, coords_y + 1, pixel_color(coords_x, coords_y)),
-      Pixel.new(coords_x - 1, coords_y, pixel_color(coords_x, coords_y)),
+      get_pixel(coords_x, coords_y - 1),
+      get_pixel(coords_x + 1, coords_y),
+      get_pixel(coords_x, coords_y + 1),
+      get_pixel(coords_x - 1, coords_y),
     ]
   end
 
@@ -90,10 +68,17 @@ class BitmapImage
   end
 
   def get_pixel(coords_x, coords_y)
-    Pixel.new(coords_x, coords_y, pixel_color(coords_x, coords_y))
+    Pixel.new(coords_x, coords_y, color_at(coords_x, coords_y))
   end
 
-  def pixel_color(coords_x, coords_y)
+  def out_of_bounds?(coords_x, coords_y)
+    coords_x <= 0 ||
+    coords_y <= 0 ||
+    coords_x > width ||
+    coords_y > height
+  end
+
+  def color_at(coords_x, coords_y)
     pixels[pizel_number(coords_x, coords_y)]
   end
 

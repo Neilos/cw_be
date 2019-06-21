@@ -57,31 +57,41 @@ RSpec.describe BitmapImage do
   end
 
   describe '#fill' do
-    context 'when position is within image bounds' do
-      subject { bitmap.fill(3, 4, 'Y') }
+    context 'when valid color' do
+      context 'when position is within image bounds' do
+        subject { bitmap.fill(3, 4, 'Y') }
 
-      it 'fills the specified pixel with the given color' do
-        expect { subject }.to change {
-          bitmap.to_s
-        }.from(
-          <<~PIXELS
-            OOOOO
-            OOOOO
-            OOOOO
-            OOOOO
-            OOOOO
-            OOOOO
-          PIXELS
-        ).to(
-          <<~PIXELS
-            OOOOO
-            OOOOO
-            OOOOO
-            OOYOO
-            OOOOO
-            OOOOO
-          PIXELS
-        )
+        it 'fills the specified pixel with the given color' do
+          expect { subject }.to change {
+            bitmap.to_s
+          }.from(
+            <<~PIXELS
+              OOOOO
+              OOOOO
+              OOOOO
+              OOOOO
+              OOOOO
+              OOOOO
+            PIXELS
+          ).to(
+            <<~PIXELS
+              OOOOO
+              OOOOO
+              OOOOO
+              OOYOO
+              OOOOO
+              OOOOO
+            PIXELS
+          )
+        end
+      end
+
+      context 'when lowercase color' do
+        subject { bitmap.fill(3, 4, 'y') }
+
+        it 'is expected to raise an InvalidColor error' do
+          expect { subject }.to raise_error(BitmapImage::InvalidColor)
+        end
       end
     end
 

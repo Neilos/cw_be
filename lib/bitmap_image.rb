@@ -2,6 +2,8 @@
 
 # Manages bitmap pixels
 class BitmapImage
+  class InvalidColor < StandardError; end
+
   def initialize(width, height)
     @height = height
     @width = width
@@ -14,6 +16,8 @@ class BitmapImage
   end
 
   def fill(coords_x, coords_y, color)
+    ensure_valid_color!(color)
+
     return unless coords_x <= width && coords_y <= height
 
     pixels[pizel_number(coords_x, coords_y)] = color
@@ -28,6 +32,10 @@ class BitmapImage
   alias initialize_pixels clear
 
   LINE_END = "\n"
+
+  def ensure_valid_color!(color)
+    raise InvalidColor.new('invalid color :(') unless color == color.upcase
+  end
 
   def pizel_number(coords_x, coords_y)
     zero_indexed_x = coords_x - 1

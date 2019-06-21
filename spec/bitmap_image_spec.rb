@@ -111,4 +111,36 @@ RSpec.describe BitmapImage do
       end
     end
   end
+
+  describe 'flood_fill' do
+    subject { bitmap.flood_fill(2, 2, 'G') }
+
+    let(:width) { 3 }
+    let(:height) { 3 }
+
+    before do
+      bitmap.fill(1, 1, 'B')
+      bitmap.fill(1, 2, 'B')
+      bitmap.fill(2, 2, 'B')
+      bitmap.fill(3, 1, 'B')
+    end
+
+    it 'flood fills the image' do
+      expect { subject }.to change {
+        bitmap.to_s
+      }.from(
+        <<~PIXELS
+          BOB
+          BBO
+          OOO
+        PIXELS
+      ).to(
+        <<~PIXELS
+          GOB
+          GGO
+          OOO
+        PIXELS
+      )
+    end
+  end
 end

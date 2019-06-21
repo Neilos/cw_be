@@ -7,8 +7,21 @@ RSpec.describe BitmapEditor do
 
   describe 'run' do
     context 'when color is invalid' do
-      context 'when multiple characters' do
+      context 'when lowercase characters' do
         let(:file_path) { 'spec/fixtures/lowercase_color.txt' }
+
+        it 'yields a warning to the given block' do
+          expect { |blk|
+            bitmap_editor.run(file_path, &blk)
+          }.to yield_successive_args(
+            nil,
+            'invalid color :('
+          )
+        end
+      end
+
+      context 'when multiple characters' do
+        let(:file_path) { 'spec/fixtures/multi_character_color.txt' }
 
         it 'yields a warning to the given block' do
           expect { |blk|

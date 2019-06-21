@@ -64,7 +64,7 @@ class BitmapImage
   end
 
   def ensure_valid_color!(color)
-    raise InvalidColor.new('invalid color :(') unless color == color.upcase
+    raise InvalidColor.new('invalid color :(') if color != color.upcase || color.length > 1
   end
 
   def get_pixel(coords_x, coords_y)

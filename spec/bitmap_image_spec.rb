@@ -93,6 +93,14 @@ RSpec.describe BitmapImage do
           expect { subject }.to raise_error(BitmapImage::InvalidColor)
         end
       end
+
+      context 'when multiple character color' do
+        subject { bitmap.color_pixel(3, 4, 'AG') }
+
+        it 'is expected to raise an InvalidColor error' do
+          expect { subject }.to raise_error(BitmapImage::InvalidColor)
+        end
+      end
     end
 
     context 'when position is beyond image right edge' do

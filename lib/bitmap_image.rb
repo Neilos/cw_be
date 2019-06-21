@@ -21,6 +21,10 @@ class BitmapImage
     def coords_y=(y)
       [y, 0].min
     end
+
+    def out_of_bounds?
+      coords_x <= 0 || coords_y <= 0
+    end
   end
 
   def initialize(width, height)
@@ -43,9 +47,10 @@ class BitmapImage
   end
 
   def flood_fill(coords_x, coords_y, color, target_color = nil)
-    initial_color = pixel_color(coords_x, coords_y)
+    pixel = get_pixel(coords_x, coords_y)
+    initial_color = pixel.color
 
-    return if coords_x == 0 || coords_y == 0
+    return if pixel.out_of_bounds?
 
     if initial_color == target_color || target_color.nil?
       fill(coords_x, coords_y, color)
@@ -82,6 +87,10 @@ class BitmapImage
 
   def ensure_valid_color!(color)
     raise InvalidColor.new('invalid color :(') unless color == color.upcase
+  end
+
+  def get_pixel(coords_x, coords_y)
+    Pixel.new(coords_x, coords_y, pixel_color(coords_x, coords_y))
   end
 
   def pixel_color(coords_x, coords_y)

@@ -25,10 +25,10 @@ RSpec.describe BitmapImage do
 
     before do
       # Fill some pixels with color
-      bitmap.fill(2, 2, 'F')
-      bitmap.fill(3, 3, 'A')
-      bitmap.fill(4, 4, 'C')
-      bitmap.fill(5, 5, 'E')
+      bitmap.color_pixel(2, 2, 'F')
+      bitmap.color_pixel(3, 3, 'A')
+      bitmap.color_pixel(4, 4, 'C')
+      bitmap.color_pixel(5, 5, 'E')
     end
 
     it 'resets all the pixels to their original "O" color' do
@@ -56,12 +56,12 @@ RSpec.describe BitmapImage do
     end
   end
 
-  describe '#fill' do
+  describe '#color_pixel' do
     context 'when valid color' do
       context 'when position is within image bounds' do
-        subject { bitmap.fill(3, 4, 'Y') }
+        subject { bitmap.color_pixel(3, 4, 'Y') }
 
-        it 'fills the specified pixel with the given color' do
+        it 'color_pixels the specified pixel with the given color' do
           expect { subject }.to change {
             bitmap.to_s
           }.from(
@@ -87,7 +87,7 @@ RSpec.describe BitmapImage do
       end
 
       context 'when lowercase color' do
-        subject { bitmap.fill(3, 4, 'y') }
+        subject { bitmap.color_pixel(3, 4, 'y') }
 
         it 'is expected to raise an InvalidColor error' do
           expect { subject }.to raise_error(BitmapImage::InvalidColor)
@@ -96,7 +96,7 @@ RSpec.describe BitmapImage do
     end
 
     context 'when position is beyond image right edge' do
-      subject { bitmap.fill(6, 4, 'Y') }
+      subject { bitmap.color_pixel(6, 4, 'Y') }
 
       it 'does nothing' do
         expect { subject }.not_to(change { bitmap.to_s })
@@ -104,7 +104,7 @@ RSpec.describe BitmapImage do
     end
 
     context 'when position is beyond image bottom edge' do
-      subject { bitmap.fill(3, 7, 'Y') }
+      subject { bitmap.color_pixel(3, 7, 'Y') }
 
       it 'does nothing' do
         expect { subject }.not_to(change { bitmap.to_s })
@@ -112,7 +112,7 @@ RSpec.describe BitmapImage do
     end
 
     context 'when position is beyond image left edge' do
-      subject { bitmap.fill(-1, 4, 'Y') }
+      subject { bitmap.color_pixel(-1, 4, 'Y') }
 
       it 'does nothing' do
         expect { subject }.not_to(change { bitmap.to_s })
@@ -120,7 +120,7 @@ RSpec.describe BitmapImage do
     end
 
     context 'when position is beyond image top edge' do
-      subject { bitmap.fill(3, -1, 'Y') }
+      subject { bitmap.color_pixel(3, -1, 'Y') }
 
       it 'does nothing' do
         expect { subject }.not_to(change { bitmap.to_s })
@@ -128,20 +128,20 @@ RSpec.describe BitmapImage do
     end
   end
 
-  describe 'flood_fill' do
-    subject { bitmap.flood_fill(2, 2, 'G') }
+  describe 'fill' do
+    subject { bitmap.fill(2, 2, 'G') }
 
     let(:width) { 3 }
     let(:height) { 3 }
 
     before do
-      bitmap.fill(1, 1, 'B')
-      bitmap.fill(1, 2, 'B')
-      bitmap.fill(2, 2, 'B')
-      bitmap.fill(3, 1, 'B')
+      bitmap.color_pixel(1, 1, 'B')
+      bitmap.color_pixel(1, 2, 'B')
+      bitmap.color_pixel(2, 2, 'B')
+      bitmap.color_pixel(3, 1, 'B')
     end
 
-    it 'flood fills the image' do
+    it 'fills pixels of the same color as the initially specified one' do
       expect { subject }.to change {
         bitmap.to_s
       }.from(

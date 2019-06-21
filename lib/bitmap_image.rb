@@ -17,7 +17,7 @@ class BitmapImage
     @pixels = Array.new(width * height, 'O')
   end
 
-  def fill(coords_x, coords_y, color)
+  def color_pixel(coords_x, coords_y, color)
     ensure_valid_color!(color)
 
     return if out_of_bounds?(coords_x, coords_y)
@@ -25,16 +25,16 @@ class BitmapImage
     pixels[pizel_number(coords_x, coords_y)] = color
   end
 
-  def flood_fill(coords_x, coords_y, fill_color, target_color = nil)
+  def fill(coords_x, coords_y, fill_color, target_color = nil)
     return if out_of_bounds?(coords_x, coords_y)
 
     pixel = get_pixel(coords_x, coords_y)
 
     if pixel.color == target_color || target_color.nil?
-      fill(coords_x, coords_y, fill_color)
+      color_pixel(coords_x, coords_y, fill_color)
 
       adjacent_pixels(coords_x, coords_y).each do |adjacent_pixel|
-        flood_fill(
+        fill(
           adjacent_pixel.coords_x,
           adjacent_pixel.coords_y,
           fill_color,

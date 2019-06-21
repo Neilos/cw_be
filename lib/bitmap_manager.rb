@@ -22,7 +22,7 @@ class BitmapManager
     ensure_current_image!
 
     (coords_x1..coords_x2).each do |coords_x|
-      current_image.color_pixel(coords_x, coords_y, color)
+      draw_single_pixel(coords_x, coords_y, color)
     end
 
     nil
@@ -32,7 +32,7 @@ class BitmapManager
     ensure_current_image!
 
     (coords_y1..coords_y2).each do |coords_y|
-      current_image.color_pixel(coords_x, coords_y, color)
+      draw_single_pixel(coords_x, coords_y, color)
     end
 
     nil
